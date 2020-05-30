@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "131053567300",
+    "firebase_url": "https://walksafe-bceb3.firebaseio.com",
+    "project_id": "walksafe-bceb3",
+    "storage_bucket": "walksafe-bceb3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131053567300:android:90ae4804671f324060ab11",
+        "android_client_info": {
+          "package_name": "com.gql.walksafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131053567300-h83edmur2tk604f4sngatig4runblvkd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.gql.walksafe",
+            "certificate_hash": "5e20874ea0273b1767b1ca91c01401df0b475005"
+          }
+        },
+        {
+          "client_id": "131053567300-sni8uq1tpmo6ppv7fq43207mmnipkimc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDQPzOdGGH20RVz7xt4ylQ_-TrMT2oW920"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131053567300-sni8uq1tpmo6ppv7fq43207mmnipkimc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
