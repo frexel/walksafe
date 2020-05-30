@@ -2,3 +2,25 @@
 	width: 100%;
 	height: 100%;
 }
+.inputs{
+	height: 20%;
+	display: flex;
+	justify-content: center;
+	margin: 3%;
+}
+ion-input{
+    padding: auto 0;
+    background: #ffffff;
+    opacity: 0.8;
+    border-radius: 25px;
+    margin: 0px;
+}
+ion-icon{
+	rotate: -25deg;
+	padding: 4%;
+	margin-left: 8%;
+}
+ion-fab{
+	margin-right: 5px;
+	margin-bottom: 20px;
+}
