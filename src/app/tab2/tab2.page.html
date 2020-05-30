@@ -1,17 +1,30 @@
 <ion-content [fullscreen]="true" scroll-x="false" scroll-y="false">
 	<ion-header translucent="true" slot="fixed">
 		<div class="inputs">
-			<ion-input class="ion-padding" autocomplete="on" placeholder="A donde vas?"></ion-input>
+			<ion-input
+				class="ion-padding"
+				autocomplete="on"
+				placeholder="A donde vas?"
+			></ion-input>
 		</div>
 		<div button class="inputs">
-			<ion-input class="ion-padding" autocomplete="on" placeholder="Quién puede ver tu ubicación?"></ion-input>
+			<ion-input
+				class="ion-padding"
+				autocomplete="on"
+				placeholder="Quién puede ver tu ubicación?"
+			></ion-input>
 		</div>
 	</ion-header>
 	<div #map id="map"></div>
 
 	<ion-fab vertical="bottom" horizontal="end" slot="fixed">
-		<ion-fab-button>
+		<ion-fab-button (click)="startTracking()">
 			<ion-icon name="send"></ion-icon>
+		</ion-fab-button>
+	</ion-fab>
+	<ion-fab vertical="top" horizontal="start" slot="fixed">
+		<ion-fab-button (click)="getOtherUserPosition()">
+			<ion-icon name="map"></ion-icon>
 		</ion-fab-button>
 	</ion-fab>
 </ion-content>
