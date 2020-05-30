@@ -1,0 +1,7 @@
+{
+  "name": "walksafe",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
