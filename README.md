@@ -5,8 +5,8 @@ Organizado por Globant y Belatrix.
 ## Links
 * [Ayuda](#Concurso-de-popularidad)
 * [Proyecto](#Proyecto)
-* [Ejecución](#Ejecucion)
-* [Tecnologías](#Tecnologias)
+* [Ejecución](#Ejecución)
+* [Tecnologías](#Tecnologías)
 
 ## Concurso de popularidad
 - Si te gusta nuestro proyecto lo podés votar para que gane el concurso de popularidad acá:
