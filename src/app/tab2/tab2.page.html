@@ -17,8 +17,18 @@
 	</ion-header>
 	<div #map id="map"></div>
 
-	<ion-fab vertical="bottom" horizontal="end" slot="fixed">
+	<ion-fab
+		vertical="bottom"
+		horizontal="end"
+		slot="fixed"
+		*ngIf="!isTracking"
+	>
 		<ion-fab-button (click)="startTracking()">
+			<ion-icon name="send"></ion-icon>
+		</ion-fab-button>
+	</ion-fab>
+	<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isTracking">
+		<ion-fab-button (click)="stopTracking()">
 			<ion-icon name="send"></ion-icon>
 		</ion-fab-button>
 	</ion-fab>

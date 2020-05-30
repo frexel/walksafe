@@ -21,12 +21,13 @@ export class Tab2Page {
 
 	locations: Observable<any>;
 	locationsCollection: AngularFirestoreCollection<any>;
-
+	userRef;
 	isTracking = false;
 	watch: string;
 	user = null;
 	otherUser: string;
 	constructor(private afs: AngularFirestore) {
+		this.locationsCollection = this.afs.collection(`users`);
 		this.getMyPosition();
 	}
 
@@ -37,12 +38,20 @@ export class Tab2Page {
 	// conseguir mi posicion y actualizar la DB
 	getMyPosition() {
 		this.user = "kfOuIqQxzn1Y6DSfKLSv";
-
-		this.locationsCollection = this.afs.collection(
-			`users/${this.user}/tracks/`,
+		/* this.locationsCollection = this.afs.collection(`users`); */
+		this.userRef = this.locationsCollection.doc(this.user);
+		this.locations = this.userRef
+			.snapshotChanges()
+			.pipe(map((doc) => (doc as any).payload.data().position));
+		// actualizar en cada cambio
+		this.locations.subscribe((locations) => {
+			this.updateMap(locations);
+		});
+		/* this.locationsCollection = this.afs.collection(
+			`users/${this.user}`,
 			(ref) => ref.orderBy("timestamp")
 		);
-
+		console.log(this.locationsCollection);
 		this.locations = this.locationsCollection.snapshotChanges().pipe(
 			map((actions) =>
 				actions.map((a) => {
@@ -57,29 +66,37 @@ export class Tab2Page {
 			console.log(locations);
 
 			this.updateMap(locations);
-		});
+		}); */
 	}
 
 	getOtherUserPosition() {
 		this.otherUser = "eJFKh5JPZaqyfUcZj2qT";
+		this.locationsCollection = this.afs.collection(`users`);
+		this.userRef = this.locationsCollection.doc(this.otherUser);
+		this.locations = this.userRef
+			.snapshotChanges()
+			.pipe(map((doc) => (doc as any).payload.data().position));
+		// actualizar en cada cambio
+		this.locations.subscribe((locations) => {
+			this.updateMap(locations);
+		});
 
-		this.locationsCollection = this.afs.collection(
-			`users/${this.otherUser}/tracks/`,
-			(ref) => ref.orderBy("timestamp").limit(1)
-		);
-		this.locations = this.locationsCollection.snapshotChanges().pipe(
-			map((actions) =>
-				actions.map((a) => {
+		/* this.locationsCollection = this.afs.collection(`users`);
+		const userRef = this.locationsCollection.doc(this.otherUser);
+		this.locations = this.userRef.snapshotChanges().pipe(
+			map(
+				(actions) => console.log(actions)
+				/* actions.map((a) => {
 					const data = a.payload.doc.data();
 					const id = a.payload.doc.id;
 					return { id, ...data };
-				})
+				}) 
 			)
 		);
 		// actualizar en cada cambio
 		this.locations.subscribe((locations) => {
 			this.updateMap(locations);
-		});
+		}); */
 	}
 	// inicializar el mapa
 	loadMap() {
@@ -129,7 +146,10 @@ export class Tab2Page {
 
 	// guardar la ubicacion y actualizar el mapa
 	addNewLocation(lat, lng, timestamp) {
-		this.locationsCollection.add({
+		console.log("agregue");
+		this.user = "kfOuIqQxzn1Y6DSfKLSv";
+		this.userRef = this.locationsCollection.doc(this.user);
+		this.userRef.set({
 			position: {
 				lat,
 				lng,
@@ -143,24 +163,18 @@ export class Tab2Page {
 		this.map.setZoom(5);
 	}
 
-	updateMap(locations) {
+	updateMap(position) {
 		this.markers.map((marker) => marker.setMap(null));
 		this.markers = [];
 
-		console.log(locations);
-		for (let location of locations) {
-			let latLng = new google.maps.LatLng(
-				location.position.lat,
-				location.position.lng
-			);
+		let latLng = new google.maps.LatLng(position.lat, position.lng);
 
-			let marker = new google.maps.Marker({
-				map: this.map,
-				animation: google.maps.Animation.DROP,
-				position: latLng,
-			});
-			//console.log(this.markers, marker);
-			this.markers.push(marker);
-		}
+		let marker = new google.maps.Marker({
+			map: this.map,
+			animation: google.maps.Animation.DROP,
+			position: latLng,
+		});
+		//console.log(this.markers, marker);
+		this.markers.push(marker);
 	}
 }
