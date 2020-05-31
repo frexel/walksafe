@@ -6,6 +6,7 @@ import {
 	AngularFirestoreCollection,
 	AngularFirestore,
 } from "@angular/fire/firestore";
+import { AuthService } from '../services/auth.service';
 const { Geolocation } = Plugins;
 
 declare var google;
@@ -16,18 +17,23 @@ declare var google;
 })
 export class Tab2Page {
 	@ViewChild("map", { static: false }) mapElement: ElementRef;
+	user = null;
+	userid;
 	map: any;
 	markers = [];
-
-	locations: Observable<any>;
-	locationsCollection: AngularFirestoreCollection<any>;
-	userRef;
+	positions: Observable<any>;
+	usersCollection: AngularFirestoreCollection<any>;
+	userDoc;
 	isTracking = false;
 	watch: string;
-	user = null;
-	otherUser: string;
-	constructor(private afs: AngularFirestore) {
-		this.locationsCollection = this.afs.collection(`users`);
+
+	constructor(private afs: AngularFirestore, private authservice : AuthService) {
+		this.usersCollection = this.afs.collection(`users`);
+		/* this.user = this.authservice.getuserAuth().subscribe(user => {
+			this.userid = user.uid;
+		  }); */
+		this.userDoc = this.usersCollection.doc('2');
+		
 		this.getMyPosition();
 	}
 
@@ -37,67 +43,16 @@ export class Tab2Page {
 
 	// conseguir mi posicion y actualizar la DB
 	getMyPosition() {
-		this.user = "kfOuIqQxzn1Y6DSfKLSv";
-		/* this.locationsCollection = this.afs.collection(`users`); */
-		this.userRef = this.locationsCollection.doc(this.user);
-		this.locations = this.userRef
+		//this.userDoc = this.usersCollection.doc(this.user);
+		this.positions = this.userDoc
 			.snapshotChanges()
 			.pipe(map((doc) => (doc as any).payload.data().position));
 		// actualizar en cada cambio
-		this.locations.subscribe((locations) => {
-			this.updateMap(locations);
+		this.positions.subscribe((positions) => {
+			this.updateMap(positions);
 		});
-		/* this.locationsCollection = this.afs.collection(
-			`users/${this.user}`,
-			(ref) => ref.orderBy("timestamp")
-		);
-		console.log(this.locationsCollection);
-		this.locations = this.locationsCollection.snapshotChanges().pipe(
-			map((actions) =>
-				actions.map((a) => {
-					const data = a.payload.doc.data();
-					const id = a.payload.doc.id;
-					return { id, ...data };
-				})
-			)
-		);
-
-		this.locations.subscribe((locations) => {
-			console.log(locations);
-
-			this.updateMap(locations);
-		}); */
 	}
 
-	getOtherUserPosition() {
-		this.otherUser = "eJFKh5JPZaqyfUcZj2qT";
-		this.locationsCollection = this.afs.collection(`users`);
-		this.userRef = this.locationsCollection.doc(this.otherUser);
-		this.locations = this.userRef
-			.snapshotChanges()
-			.pipe(map((doc) => (doc as any).payload.data().position));
-		// actualizar en cada cambio
-		this.locations.subscribe((locations) => {
-			this.updateMap(locations);
-		});
-
-		/* this.locationsCollection = this.afs.collection(`users`);
-		const userRef = this.locationsCollection.doc(this.otherUser);
-		this.locations = this.userRef.snapshotChanges().pipe(
-			map(
-				(actions) => console.log(actions)
-				/* actions.map((a) => {
-					const data = a.payload.doc.data();
-					const id = a.payload.doc.id;
-					return { id, ...data };
-				}) 
-			)
-		);
-		// actualizar en cada cambio
-		this.locations.subscribe((locations) => {
-			this.updateMap(locations);
-		}); */
-	}
 	// inicializar el mapa
 	loadMap() {
 		let latLng = new google.maps.LatLng(-35.9036442, -57.6673267);
@@ -114,26 +69,22 @@ export class Tab2Page {
 			mapOptions
 		);
 	}
+
 	// empezar a trackear
 	startTracking() {
 		this.isTracking = true;
 		this.watch = Geolocation.watchPosition({}, (position, err) => {
 			if (position) {
-				this.addNewLocation(
+				this.addNewPosition(
 					position.coords.latitude,
 					position.coords.longitude,
 					position.timestamp
 				);
-				// ACÁ AGREGO LA FUNCION PARA COMPARTIR CON CONTACTOS?
 			}
 		});
 
-		this.locations.subscribe((locations) => {
-			console.log("hola");
-
-			console.log(locations);
-
-			this.updateMap(locations);
+		this.positions.subscribe((positions) => {
+			this.updateMap(positions);
 		});
 	}
 
@@ -142,20 +93,20 @@ export class Tab2Page {
 		Geolocation.clearWatch({ id: this.watch }).then(() => {
 			this.isTracking = false;
 		});
+		this.userDoc.set({
+			notification:'stopped',
+		});
 	}
 
 	// guardar la ubicacion y actualizar el mapa
-	addNewLocation(lat, lng, timestamp) {
-		console.log("agregue");
-		this.user = "kfOuIqQxzn1Y6DSfKLSv";
-		this.userRef = this.locationsCollection.doc(this.user);
-		this.userRef.set({
+	addNewPosition(lat, lng, timestamp) {
+		this.userDoc.set({
 			position: {
 				lat,
 				lng,
 			},
-
 			timestamp,
+			state:'sharing',
 		});
 
 		let position = new google.maps.LatLng(lat, lng);

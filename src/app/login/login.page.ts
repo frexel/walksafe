@@ -22,7 +22,8 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   login() {
-    this.afauth.signInAnonymously().then((res) => {
+    this.router.navigate(["/app"]);
+    /* this.afauth.signInAnonymously().then((res) => {
       this.usersCollection = this.afs.collection(`users`);
       this.user = res.user;
       let userRef = this.usersCollection.doc(this.user.uid);
@@ -33,8 +34,8 @@ export class LoginPage implements OnInit {
         },
         timestamp: 0,
         notification: "",
+        state:'',
       });
-      this.router.navigate(["/app"]);
-    });
+    }); */
   }
 }

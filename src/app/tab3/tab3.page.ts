@@ -15,7 +15,6 @@ export class Tab3Page {
   
   ngOnInit() {
       this.authservice.getuserAuth().subscribe(user => {
-        console.log(user);
         this.userid = user.uid;
       })
     }
