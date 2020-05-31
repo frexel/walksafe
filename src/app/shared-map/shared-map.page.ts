@@ -38,6 +38,9 @@ export class SharedMapPage {
 			this.userid = user.uid;
 		  }); */
 		this.userDoc = this.usersCollection.doc("2");
+	}
+
+	ionViewWillEnter(){
 		this.startTracking();
 	}
 
