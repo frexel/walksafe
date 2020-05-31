@@ -51,22 +51,22 @@ export class SharedMapPage {
 		this.notifications.subscribe((notification) => {
 			if (notification == "sharing") {
 				this.customAlert(
-					"Nombre Apellido",
+					"Leandro Dumón",
 					"Está compartiendo su ubicación",
 					"Aceptar",
 					"Cancelar"
 				);
 			} else if (notification == "stopped") {
 				this.customAlert(
-					"Nombre Apellido",
+					"Marcos Pizzi",
 					"Ha dejado de compartir su ubicación",
 					"Aceptar",
 					"Cancelar"
 				);
 			} else if (notification == "panic") {
 				this.customAlert(
-					"Nombre ",
-					"Está en problemas",
+					"Camila Díaz",
+					"Activó el botón de pánico",
 					"Aceptar",
 					"Cancelar"
 				);

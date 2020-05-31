@@ -33,22 +33,22 @@ export class Tab1Page {
 		this.notifications.subscribe((notification) => {
 			if (notification == "sharing") {
 				this.customAlert(
-					"Nombre Apellido",
+					"Juan García",
 					"Está compartiendo su ubicación",
 					"Aceptar",
 					"Cancelar"
 				);
 			} else if (notification == "stopped") {
 				this.customAlert(
-					"Nombre Apellido",
+					"Florencia Silva",
 					"Ha dejado de compartir su ubicación",
 					"Aceptar",
 					"Cancelar"
 				);
 			} else if (notification == "panic") {
 				this.customAlert(
-					"Nombre ",
-					"Está en problemas",
+					"Javier Pérez ",
+					"Activó el botón de pánico",
 					"Aceptar",
 					"Cancelar"
 				);
@@ -111,7 +111,7 @@ export class Tab1Page {
 	async presentAlertPrompt() {
 		const alert = await this.alertController.create({
 			cssClass: "my-custom-class",
-			header: "Nombre Apellido",
+			header: "Leandro Dumón",
 			message: "Está compartiendo su ubicación",
 			buttons: [
 				{
