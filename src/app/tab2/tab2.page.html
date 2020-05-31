@@ -1,16 +1,20 @@
 <ion-content [fullscreen]="true" scroll-x="false" scroll-y="false">
 	<ion-header translucent="true" slot="fixed">
-		<div class="inputs">
-			<ion-input
+		<div class="inputs" *ngIf="!isTracking">
+			<ion-searchbar
+				id="searchTextField"
 				class="ion-padding"
 				placeholder="A donde vas?"
-			></ion-input>
+				debounce="500"
+				(ionChange)="trackWithDestination(-34.921335, -57.954500)"
+			></ion-searchbar>
 		</div>
-		<div button class="inputs">
-			<ion-input
+
+		<div button class="inputs" *ngIf="!isTracking">
+			<ion-searchbar
 				class="ion-padding"
 				placeholder="Quién puede ver tu ubicación?"
-			></ion-input>
+			></ion-searchbar>
 		</div>
 	</ion-header>
 	<div #map id="map"></div>
@@ -32,10 +36,14 @@
 		</ion-fab-button>
 	</ion-fab>
 
-	<ion-fab vertical="bottom" horizontal="start" slot="fixed" *ngIf="isTracking">
+	<ion-fab
+		vertical="bottom"
+		horizontal="start"
+		slot="fixed"
+		*ngIf="isTracking"
+	>
 		<ion-fab-button (click)="sendAlert()" color="danger">
 			<ion-icon name="warning"></ion-icon>
 		</ion-fab-button>
 	</ion-fab>
-
 </ion-content>

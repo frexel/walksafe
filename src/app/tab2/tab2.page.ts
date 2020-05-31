@@ -40,7 +40,7 @@ export class Tab2Page {
 			this.userid = user.uid;
 		  }); */
 		this.userDoc = this.usersCollection.doc("2");
-
+		this.destination = null;
 		this.getMyPosition();
 	}
 
@@ -88,6 +88,11 @@ export class Tab2Page {
 		});
 	}
 
+	//track with destination
+	trackWithDestination(lat, lng) {
+		this.destination = { lat, lng };
+		this.startTracking();
+	}
 	// empezar a trackear
 	startTracking() {
 		this.isTracking = true;
@@ -103,19 +108,20 @@ export class Tab2Page {
 			}
 		});
 
-		this.positions.subscribe((positions) => {
-			this.updateMap(positions);
-		});
+		// this.positions.subscribe((positions) => {
+		// 	console.log({ positions });
+		// 	this.updateMap(positions);
+		// });
 	}
 
 	// cerrar la suscripción
 	stopTracking() {
 		Geolocation.clearWatch({ id: this.watch }).then(() => {
 			this.isTracking = false;
-		});
-		this.userDoc.set({
+		}); /* 
+		this.userDoc.update({
 			notification: "stopped",
-		});
+		}); */
 	}
 
 	// guardar la ubicacion y actualizar el mapa
@@ -127,7 +133,6 @@ export class Tab2Page {
 			},
 			timestamp,
 			state: "sharing",
-			destination: this.destination,
 		});
 
 		let position = new google.maps.LatLng(lat, lng);
@@ -141,51 +146,33 @@ export class Tab2Page {
 
 		let latLng = new google.maps.LatLng(position.lat, position.lng);
 
-		latLng.google.maps.event.addListener(map, "click", function (event) {
+		/* latLng.google.maps.event.addListener(map, "click", function (event) {
 			let pos = event.latLng;
 			console.log(pos);
-
+            
 			let lat = pos.lat();
 			let lng = pos.lng();
 			this.destination = { lat: lat, lng: lng };
 			console.log(this.destination);
-		});
+		}); */
 		let marker = new google.maps.Marker({
 			map: this.map,
 			animation: google.maps.Animation.DROP,
 			position: latLng,
 		});
+
+		if (this.destination) {
+			let marker = new google.maps.Marker({
+				map: this.map,
+				animation: google.maps.Animation.DROP,
+				position: this.destination,
+				title: "Nuevo destino",
+			});
+
+			this.markers.push(marker);
+		}
+
 		//console.log(this.markers, marker);
 		this.markers.push(marker);
-	}
-	async customAlert(
-		title?: string,
-		message?: string,
-		acceptButtonText?: string,
-		cancelButtonText?: string
-	) {
-		const alert = await this.alertController.create({
-			cssClass: "my-custom-class",
-			header: title,
-			message: message,
-			buttons: [
-				{
-					text: cancelButtonText,
-					role: "cancel",
-					cssClass: "secondary",
-					handler: () => {
-						console.log("Confirm Cancel");
-					},
-				},
-				{
-					text: acceptButtonText,
-					handler: () => {
-						console.log("confirm accept");
-					},
-				},
-			],
-		});
-
-		await alert.present();
 	}
 }

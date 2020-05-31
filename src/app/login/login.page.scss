@@ -1,8 +1,19 @@
-ion-content{
-    --background: rgb(76,115,240);
-    --background: linear-gradient(143deg, rgba(76,115,240,1) 0%, rgba(101,0,224,1) 100%);
+ion-content {
+	--background: rgb(76, 115, 240);
+	--background: linear-gradient(
+		143deg,
+		rgba(76, 115, 240, 1) 0%,
+		rgba(101, 0, 224, 1) 100%
+	);
 }
-
-ion-col{
-    --padding: auto 0;
+.row {
+	padding-top: 25%;
+}
+ion-col {
+	--padding: auto 0;
+}
+ion-item {
+	border-radius: 25px;
+	margin: 10% 0;
+	--background-color: gray;
 }

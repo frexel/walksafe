@@ -1,5 +1,5 @@
 {
-  "appId": "io.ionic.starter",
+  "appId": "com.gql.walksafe",
   "appName": "walksafe",
   "bundledWebRuntime": false,
   "npmClient": "npm",

@@ -45,6 +45,9 @@ export class SharedMapPage {
 
 	ionViewWillEnter() {
 		this.startTracking();
+		this.notifications = this.userDoc
+			.snapshotChanges()
+			.pipe(map((doc) => (doc as any).payload.data().notifications));
 		this.notifications.subscribe((notification) => {
 			if (notification == "sharing") {
 				this.customAlert(
