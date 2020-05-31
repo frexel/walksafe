@@ -1,18 +1,30 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>login</ion-title>
-  </ion-toolbar>
+	<ion-toolbar>
+		<ion-title>walksafe</ion-title>
+	</ion-toolbar>
 </ion-header>
 
-<ion-content>
-<ion-grid fixed>
-  <ion-row>
-    <ion-col size="6">
-      <ion-button (click)="login()" expand="block" fill="clear" shape="round">
-        Login
-      </ion-button>
-    </ion-col>
-    <ion-col size="6"></ion-col>
-  </ion-row>
-</ion-grid>
+<ion-content scroll-y="false">
+	<ion-grid fixed>
+		<ion-col>
+			<img
+				src="https://img.freepik.com/free-vector/walk-city-illustration-concept_114360-782.jpg?size=626&ext=jpg"
+				alt=""
+			/>
+		</ion-col>
+		<ion-row>
+			<ion-col size="12">
+				<ion-button
+					(click)="login()"
+					expand="block"
+					fill="clear"
+					shape="round"
+					color="medium"
+				>
+					Login
+				</ion-button>
+			</ion-col>
+			<ion-col size="6"></ion-col>
+		</ion-row>
+	</ion-grid>
 </ion-content>

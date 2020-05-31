@@ -40,7 +40,7 @@ export class SharedMapPage {
 		this.userDoc = this.usersCollection.doc("2");
 	}
 
-	ionViewWillEnter(){
+	ionViewWillEnter() {
 		this.startTracking();
 	}
 
@@ -79,6 +79,7 @@ export class SharedMapPage {
 	}
 
 	updateMap(position) {
+		this.map.setCenter(position);
 		this.markers.map((marker) => marker.setMap(null));
 		this.markers = [];
 
