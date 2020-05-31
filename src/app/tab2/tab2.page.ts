@@ -7,6 +7,7 @@ import {
   AngularFirestore,
 } from "@angular/fire/firestore";
 import { AuthService } from "../services/auth.service";
+import { AlertController } from "@ionic/angular";
 const { Geolocation } = Plugins;
 
 declare var google;
