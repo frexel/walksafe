@@ -85,7 +85,9 @@ export class Tab2Page {
 				);
 			}
 		});
-
+		this.userDoc.set({
+			notification: "sharing",
+		});
 		this.positions.subscribe((positions) => {
 			this.updateMap(positions);
 		});
