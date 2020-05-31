@@ -7,15 +7,16 @@ import {
 	AngularFirestore,
 } from "@angular/fire/firestore";
 import { AuthService } from "../services/auth.service";
+import { Router } from "@angular/router";
 const { Geolocation } = Plugins;
 
 declare var google;
 @Component({
-	selector: "app-tab2",
-	templateUrl: "tab2.page.html",
-	styleUrls: ["tab2.page.scss"],
+	selector: "app-shared-map",
+	templateUrl: "./shared-map.page.html",
+	styleUrls: ["./shared-map.page.scss"],
 })
-export class Tab2Page {
+export class SharedMapPage {
 	@ViewChild("map", { static: false }) mapElement: ElementRef;
 	user = null;
 	userid;
@@ -29,31 +30,15 @@ export class Tab2Page {
 
 	constructor(
 		private afs: AngularFirestore,
-		private authservice: AuthService
+		private authservice: AuthService,
+		private router: Router
 	) {
 		this.usersCollection = this.afs.collection(`users`);
 		/* this.user = this.authservice.getuserAuth().subscribe(user => {
 			this.userid = user.uid;
 		  }); */
 		this.userDoc = this.usersCollection.doc("2");
-
-		this.getMyPosition();
-	}
-
-	ionViewWillEnter() {
-		this.loadMap();
-	}
-
-	// conseguir mi posicion y actualizar la DB
-	getMyPosition() {
-		//this.userDoc = this.usersCollection.doc(this.user);
-		this.positions = this.userDoc
-			.snapshotChanges()
-			.pipe(map((doc) => (doc as any).payload.data().position));
-		// actualizar en cada cambio
-		this.positions.subscribe((positions) => {
-			this.updateMap(positions);
-		});
+		this.startTracking();
 	}
 
 	// inicializar el mapa
@@ -75,17 +60,10 @@ export class Tab2Page {
 
 	// empezar a trackear
 	startTracking() {
-		this.isTracking = true;
-		this.watch = Geolocation.watchPosition({}, (position, err) => {
-			if (position) {
-				this.addNewPosition(
-					position.coords.latitude,
-					position.coords.longitude,
-					position.timestamp
-				);
-			}
-		});
-
+		this.loadMap();
+		this.positions = this.userDoc
+			.snapshotChanges()
+			.pipe(map((doc) => (doc as any).payload.data().position));
 		this.positions.subscribe((positions) => {
 			this.updateMap(positions);
 		});
@@ -93,28 +71,8 @@ export class Tab2Page {
 
 	// cerrar la suscripción
 	stopTracking() {
-		Geolocation.clearWatch({ id: this.watch }).then(() => {
-			this.isTracking = false;
-		});
-		this.userDoc.set({
-			notification: "stopped",
-		});
-	}
-
-	// guardar la ubicacion y actualizar el mapa
-	addNewPosition(lat, lng, timestamp) {
-		this.userDoc.set({
-			position: {
-				lat,
-				lng,
-			},
-			timestamp,
-			state: "sharing",
-		});
-
-		let position = new google.maps.LatLng(lat, lng);
-		this.map.setCenter(position);
-		this.map.setZoom(5);
+		this.router.navigate(["app"]);
+		//reroutear
 	}
 
 	updateMap(position) {
