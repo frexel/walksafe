@@ -3,14 +3,12 @@
 		<div class="inputs">
 			<ion-input
 				class="ion-padding"
-				autocomplete="on"
 				placeholder="A donde vas?"
 			></ion-input>
 		</div>
 		<div button class="inputs">
 			<ion-input
 				class="ion-padding"
-				autocomplete="on"
 				placeholder="Quién puede ver tu ubicación?"
 			></ion-input>
 		</div>
@@ -27,14 +25,17 @@
 			<ion-icon name="send"></ion-icon>
 		</ion-fab-button>
 	</ion-fab>
+
 	<ion-fab vertical="bottom" horizontal="end" slot="fixed" *ngIf="isTracking">
 		<ion-fab-button (click)="stopTracking()">
 			<ion-icon name="stop"></ion-icon>
 		</ion-fab-button>
 	</ion-fab>
-	<ion-fab vertical="bottom" horizontal="start" slot="fixed">
-		<ion-fab-button (click)="getOtherUserPosition()">
-			<ion-icon name="map"></ion-icon>
+
+	<ion-fab vertical="bottom" horizontal="start" slot="fixed" *ngIf="isTracking">
+		<ion-fab-button (click)="sendAlert()" color="danger">
+			<ion-icon name="warning"></ion-icon>
 		</ion-fab-button>
 	</ion-fab>
+
 </ion-content>
