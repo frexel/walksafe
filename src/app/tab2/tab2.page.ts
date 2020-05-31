@@ -7,6 +7,7 @@ import {
 	AngularFirestore,
 } from "@angular/fire/firestore";
 import { AuthService } from "../services/auth.service";
+import { AlertController } from "@ionic/angular";
 const { Geolocation } = Plugins;
 
 declare var google;
@@ -24,12 +25,14 @@ export class Tab2Page {
 	positions: Observable<any>;
 	usersCollection: AngularFirestoreCollection<any>;
 	userDoc;
+	notifications;
 	isTracking = false;
 	watch: string;
 
 	constructor(
 		private afs: AngularFirestore,
-		private authservice: AuthService
+		private authservice: AuthService,
+		private alertController: AlertController
 	) {
 		this.usersCollection = this.afs.collection(`users`);
 		/* this.user = this.authservice.getuserAuth().subscribe(user => {
@@ -42,6 +45,33 @@ export class Tab2Page {
 
 	ionViewWillEnter() {
 		this.loadMap();
+		this.notifications = this.userDoc
+			.snapshotChanges()
+			.pipe(map((doc) => (doc as any).payload.data().notifications));
+		this.notifications.subscribe((notification) => {
+			if (notification == "sharing") {
+				this.customAlert(
+					"Nombre Apellido",
+					"Está compartiendo su ubicación",
+					"Aceptar",
+					"Cancelar"
+				);
+			} else if (notification == "stopped") {
+				this.customAlert(
+					"Nombre Apellido",
+					"Ha dejado de compartir su ubicación",
+					"Aceptar",
+					"Cancelar"
+				);
+			} else if (notification == "panic") {
+				this.customAlert(
+					"Nombre ",
+					"Está en problemas",
+					"Aceptar",
+					"Cancelar"
+				);
+			}
+		});
 	}
 
 	// conseguir mi posicion y actualizar la DB
@@ -132,5 +162,35 @@ export class Tab2Page {
 		});
 		//console.log(this.markers, marker);
 		this.markers.push(marker);
+	}
+	async customAlert(
+		title?: string,
+		message?: string,
+		acceptButtonText?: string,
+		cancelButtonText?: string
+	) {
+		const alert = await this.alertController.create({
+			cssClass: "my-custom-class",
+			header: title,
+			message: message,
+			buttons: [
+				{
+					text: cancelButtonText,
+					role: "cancel",
+					cssClass: "secondary",
+					handler: () => {
+						console.log("Confirm Cancel");
+					},
+				},
+				{
+					text: acceptButtonText,
+					handler: () => {
+						console.log("confirm accept");
+					},
+				},
+			],
+		});
+
+		await alert.present();
 	}
 }
