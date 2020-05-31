@@ -140,9 +140,18 @@ export class Tab2Page {
 		this.map.setZoom(5);
 	}
 
+	placeMarker($event) {
+		console.log($event);
+
+		console.log($event.coords.lat);
+		console.log($event.coords.lng);
+	}
+
 	updateMap(position) {
 		this.markers.map((marker) => marker.setMap(null));
 		this.markers = [];
+
+		console.log(position);
 
 		let latLng = new google.maps.LatLng(position.lat, position.lng);
 
