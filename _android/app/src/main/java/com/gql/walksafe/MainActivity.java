@@ -1,4 +1,4 @@
-package io.ionic.starter;
+package com.gql.walksafe;
 
 import android.os.Bundle;
 
