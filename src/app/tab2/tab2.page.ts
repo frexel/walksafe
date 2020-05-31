@@ -41,6 +41,7 @@ export class Tab2Page {
 		  }); */
 		this.userDoc = this.usersCollection.doc("2");
 
+		this.destination = {};
 		this.getMyPosition();
 	}
 
@@ -135,13 +136,24 @@ export class Tab2Page {
 		this.map.setZoom(5);
 	}
 
+	placeMarker($event){
+		console.log($event);
+		
+		console.log($event.coords.lat);
+		console.log($event.coords.lng);
+	  }
+
 	updateMap(position) {
 		this.markers.map((marker) => marker.setMap(null));
 		this.markers = [];
 
+		console.log(position);
+		
 		let latLng = new google.maps.LatLng(position.lat, position.lng);
 
-		latLng.google.maps.event.addListener(map, "click", function (event) {
+		console.log(latLng);
+		
+		/* latLng.event.addListener(map, "click", function (event) {
 			let pos = event.latLng;
 			console.log(pos);
 
@@ -149,7 +161,7 @@ export class Tab2Page {
 			let lng = pos.lng();
 			this.destination = { lat: lat, lng: lng };
 			console.log(this.destination);
-		});
+		}); */
 		let marker = new google.maps.Marker({
 			map: this.map,
 			animation: google.maps.Animation.DROP,
@@ -157,35 +169,5 @@ export class Tab2Page {
 		});
 		//console.log(this.markers, marker);
 		this.markers.push(marker);
-	}
-	async customAlert(
-		title?: string,
-		message?: string,
-		acceptButtonText?: string,
-		cancelButtonText?: string
-	) {
-		const alert = await this.alertController.create({
-			cssClass: "my-custom-class",
-			header: title,
-			message: message,
-			buttons: [
-				{
-					text: cancelButtonText,
-					role: "cancel",
-					cssClass: "secondary",
-					handler: () => {
-						console.log("Confirm Cancel");
-					},
-				},
-				{
-					text: acceptButtonText,
-					handler: () => {
-						console.log("confirm accept");
-					},
-				},
-			],
-		});
-
-		await alert.present();
 	}
 }
