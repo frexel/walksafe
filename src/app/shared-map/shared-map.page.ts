@@ -8,6 +8,7 @@ import {
 } from "@angular/fire/firestore";
 import { AuthService } from "../services/auth.service";
 import { Router } from "@angular/router";
+import { AlertController } from "@ionic/angular";
 const { Geolocation } = Plugins;
 
 declare var google;
@@ -27,11 +28,13 @@ export class SharedMapPage {
 	userDoc;
 	isTracking = false;
 	watch: string;
+	notifications;
 
 	constructor(
 		private afs: AngularFirestore,
 		private authservice: AuthService,
-		private router: Router
+		private router: Router,
+		private alertController: AlertController
 	) {
 		this.usersCollection = this.afs.collection(`users`);
 		/* this.user = this.authservice.getuserAuth().subscribe(user => {
@@ -42,6 +45,30 @@ export class SharedMapPage {
 
 	ionViewWillEnter() {
 		this.startTracking();
+		this.notifications.subscribe((notification) => {
+			if (notification == "sharing") {
+				this.customAlert(
+					"Nombre Apellido",
+					"Está compartiendo su ubicación",
+					"Aceptar",
+					"Cancelar"
+				);
+			} else if (notification == "stopped") {
+				this.customAlert(
+					"Nombre Apellido",
+					"Ha dejado de compartir su ubicación",
+					"Aceptar",
+					"Cancelar"
+				);
+			} else if (notification == "panic") {
+				this.customAlert(
+					"Nombre ",
+					"Está en problemas",
+					"Aceptar",
+					"Cancelar"
+				);
+			}
+		});
 	}
 
 	// inicializar el mapa
@@ -92,5 +119,73 @@ export class SharedMapPage {
 		});
 		//console.log(this.markers, marker);
 		this.markers.push(marker);
+	}
+
+	//alerta
+	async presentAlert() {
+		const alert = await this.alertController.create({
+			message: "Queres borrar este contacto?",
+			buttons: ["Cancelar", "Aceptar"],
+		});
+
+		await alert.present();
+	}
+
+	async customAlert(
+		title?: string,
+		message?: string,
+		acceptButtonText?: string,
+		cancelButtonText?: string
+	) {
+		const alert = await this.alertController.create({
+			cssClass: "my-custom-class",
+			header: title,
+			message: message,
+			buttons: [
+				{
+					text: cancelButtonText,
+					role: "cancel",
+					cssClass: "secondary",
+					handler: () => {
+						console.log("Confirm Cancel");
+					},
+				},
+				{
+					text: acceptButtonText,
+					handler: () => {
+						this.router.navigate(["map"]);
+					},
+				},
+			],
+		});
+
+		await alert.present();
+	}
+
+	async presentAlertPrompt() {
+		const alert = await this.alertController.create({
+			cssClass: "my-custom-class",
+			header: "Nombre Apellido",
+			message: "Está compartiendo su ubicación",
+			buttons: [
+				{
+					text: "Cancelar",
+					role: "cancel",
+					cssClass: "secondary",
+					handler: () => {
+						console.log("Confirm Cancel");
+					},
+				},
+				{
+					text: "Aceptar",
+					handler: () => {
+						//acá hay que hacer algo con la info pero no se que
+						this.router.navigate(["map"]);
+					},
+				},
+			],
+		});
+
+		await alert.present();
 	}
 }
