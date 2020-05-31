@@ -22,7 +22,7 @@ export class LoginPage implements OnInit {
   ngOnInit() {}
 
   login() {
-    this.router.navigate(["/app"]);
+    this.router.navigate(["app/tabs/tab2"]);
     /* this.afauth.signInAnonymously().then((res) => {
       this.usersCollection = this.afs.collection(`users`);
       this.user = res.user;
